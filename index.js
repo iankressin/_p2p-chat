@@ -3,6 +3,12 @@ const topology = require("fully-connected-topology");
 const me = process.argv[2];
 const friend = process.argv[3];
 
+const peer = topology(me, friend);
+
+peer.on("connection", (connection, peer) => {
+  console.log("New connection", peer);
+});
+
 // const peer
 
 // meCon.on("connection", (connection, peer) => {
