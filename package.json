@@ -1,0 +1,23 @@
+{
+  "name": "p2p-chat",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/iankressin/_p2p-chat.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/iankressin/_p2p-chat/issues"
+  },
+  "homepage": "https://github.com/iankressin/_p2p-chat#readme",
+  "dependencies": {
+    "fully-connected-topology": "^1.1.1",
+    "stream-set": "^1.1.0"
+  }
+}

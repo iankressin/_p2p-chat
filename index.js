@@ -1,12 +1,24 @@
 const topology = require("fully-connected-topology");
+const streamSet = require("stream-set");
 
 const me = process.argv[2];
 const friend = process.argv[3];
 
+const activePeers = streamSet();
+
 const peer = topology(me, friend);
 
-peer.on("connection", (connection, peer) => {
-  console.log("New connection", peer);
+// TODO: share activePeers with new connection
+// eu PRECISO ter pelo menos uma conexao
+peer.on("connection", (connection, p) => {
+  activePeers.add(connection);
+});
+
+process.stdin.on("data", data => {
+  const msg = data.toString().trim();
+  activePeers.streams.forEach(connection => {
+    connection.write(msg);
+  });
 });
 
 // const peer
