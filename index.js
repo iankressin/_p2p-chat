@@ -1,25 +1,26 @@
+const jsonStream = require("duplex-json-stream");
 const topology = require("fully-connected-topology");
 const streamSet = require("stream-set");
 
 const me = process.argv[2];
 const friend = process.argv[3];
 
-let con;
-
 const activePeers = streamSet();
 
 const peer = topology(me, [friend]);
 
-peer.on("connection", (connection, peer) => {
-  activePeers.add(connection);
-  connection.on("data", data => {
-    console.log("Data: ");
+peer.on("connection", socket => {
+  socket = jsonStream(socket);
+  activePeers.add(socket);
+
+  socket.on("data", data => {
+    console.log(`${data.username} >>> ${data.msg}`);
   });
 });
 
 process.stdin.on("data", data => {
   const msg = data.toString().trim();
   activePeers.forEach(connection => {
-    connection.write(msg);
+    connection.write({ username: me, msg: msg });
   });
 });

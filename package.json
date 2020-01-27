@@ -17,7 +17,9 @@
   },
   "homepage": "https://github.com/iankressin/_p2p-chat#readme",
   "dependencies": {
+    "duplex-json-stream": "^1.0.1",
     "fully-connected-topology": "^1.1.1",
+    "hash-to-port": "^1.1.0",
     "stream-set": "^1.1.0"
   }
 }
