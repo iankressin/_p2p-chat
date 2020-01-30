@@ -13,6 +13,7 @@ peer.on("connection", socket => {
   socket = jsonStream(socket);
   activePeers.add(socket);
 
+  //Register a new event data for the new connection
   socket.on("data", data => {
     console.log(`${data.username} >>> ${data.msg}`);
   });
