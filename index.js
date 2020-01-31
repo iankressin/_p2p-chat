@@ -1,15 +1,22 @@
 const jsonStream = require("duplex-json-stream");
-const topology = require("fully-connected-topology");
 const streamSet = require("stream-set");
+const topology = require("fully-connected-topology");
+const dnsRegister = require("register-multicast-dns");
+const hashToPort = require("hash-to-port");
 
 const me = process.argv[2];
-const friend = process.argv[3];
+const friends = process.argv.slice(3);
 
+dnsRegister(me);
+
+const swarm = topology(toAddress(me), friends.map(toAddress));
 const activePeers = streamSet();
+const id = Math.random();
+let sequence = 0;
+const logs = {};
 
-const peer = topology(me, [friend]);
-
-peer.on("connection", socket => {
+swarm.on("connection", socket => {
+  console.log("New connection");
   socket = jsonStream(socket);
   activePeers.add(socket);
 
@@ -25,3 +32,8 @@ process.stdin.on("data", data => {
     connection.write({ username: me, msg: msg });
   });
 });
+
+function toAddress(name) {
+  // TODO: local doesnt work demands to be localhost (?????)
+  return `${name}.localhost:${hashToPort(name)}`;
+}
