@@ -1,6 +1,6 @@
 # P2P chat
 
-p2p chat application heavily inspired @mafintosh talk:
+p2p chat application heavily inspired by @mafintosh talk:
 
 https://www.elastic.co/pt/videos/how-to-write-a-p2p-chat-app-in-nodejs-by-mathias-buus
 
