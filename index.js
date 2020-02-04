@@ -12,24 +12,36 @@ dnsRegister(me);
 const swarm = topology(toAddress(me), friends.map(toAddress));
 const activePeers = streamSet();
 const id = Math.random();
-let sequence = 0;
+let seq = 0;
 const logs = {};
 
 swarm.on("connection", socket => {
   console.log("New connection");
   socket = jsonStream(socket);
   activePeers.add(socket);
-
   //Register a new event data for the new connection
   socket.on("data", data => {
+    if (logs[data.log] <= data.seq) {
+      console.log("---------------------------------------------");
+      console.log("Logs: ", logs);
+      console.log("DataSeq", data.seq);
+      console.log("LogSeq", logs[data.log]);
+      console.log("---------------------------------------------");
+      return;
+    }
+    logs[data.log] = data.seq;
     console.log(`${data.username} >>> ${data.msg}`);
+    activePeers.forEach(activeFriend => {
+      activeFriend.write(data);
+    });
   });
 });
 
 process.stdin.on("data", data => {
+  let next = seq++;
   const msg = data.toString().trim();
   activePeers.forEach(connection => {
-    connection.write({ username: me, msg: msg });
+    connection.write({ log: id, seq: seq, username: me, msg: msg });
   });
 });
 
