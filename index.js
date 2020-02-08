@@ -22,11 +22,6 @@ swarm.on("connection", socket => {
   //Register a new event data for the new connection
   socket.on("data", data => {
     if (logs[data.log] <= data.seq) {
-      console.log("---------------------------------------------");
-      console.log("Logs: ", logs);
-      console.log("DataSeq", data.seq);
-      console.log("LogSeq", logs[data.log]);
-      console.log("---------------------------------------------");
       return;
     }
     logs[data.log] = data.seq;
